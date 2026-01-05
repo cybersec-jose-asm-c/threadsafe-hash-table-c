@@ -34,3 +34,38 @@ make clean && make
 ./benchmark_extreme       # 10M elements extreme test (the beast mode)
 
 
+## Architecture Diagram
+
+```ascii
+Thread-Safe Fine-Grained Hash Table Architecture
+
++---------------------------+
+|        HashTable          |
+| ------------------------- |
+| Node** buckets            | <-- Array of pointers to linked lists (buckets)
+| size_t size               | <-- Current number of buckets (prime number)
+| atomic_size_t count       | <-- Atomic element count (O(1) load factor)
+| pthread_mutex_t mutexes[64]| <-- 64 independent mutexes (fine-grained locking)
+| pthread_mutex_t resize_mutex | <-- Dedicated mutex for resize operations
++---------------------------+
+          |
+          | (bucket_index % 64)
+          v
+   +-------------------+
+   | Bucket Mutex (one of 64) |
+   +-------------------+
+          |
+          v
+   +-------------------+     +-------------------+     +-------------------+
+   | Bucket 0 (list)   |<----| Bucket 1 (list)   |<----| ... Bucket N-1    |
+   +-------------------+     +-------------------+     +-------------------+
+          |                         |                         |
+          v                         v                         v
+   +----------------+        +----------------+        +----------------+
+   | Node (key,value,next) |-->| Node ...       |-->... | Node ...       |
+   +----------------+        +----------------+        +----------------+
+
+Resize Process (protected by resize_mutex):
+- Allocate new bucket array with larger prime size
+- Move nodes (no copy) using hash with new size
+- Free old bucket array

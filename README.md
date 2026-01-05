@@ -71,6 +71,8 @@ Resize Process (protected by resize_mutex):
 - Move nodes (no copy) using hash with new size
 - Free old bucket array
 
+## Build & Run
+
 make clean && make
 ./hashtable_test          # Basic test
 ./benchmark               # 1M elements multi-thread

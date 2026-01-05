@@ -74,6 +74,7 @@ Resize Process (protected by resize_mutex):
 ## Build & Run
 
 make clean && make
+
 ./hashtable_test          # Basic test
 ./benchmark               # 1M elements multi-thread
 ./benchmark_extreme       # 100M elements extreme test

@@ -70,6 +70,7 @@ Resize Process (protected by resize_mutex):
 - Allocate new bucket array with larger prime size
 - Move nodes (no copy) using hash with new size
 - Free old bucket array
+**---**
 
 ## Build & Run
 

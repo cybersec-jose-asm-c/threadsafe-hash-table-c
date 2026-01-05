@@ -35,7 +35,7 @@
 - Safe handling of negative keys
 - No external dependencies
 
-## **Architecture Diagram**
+## Architecture Diagram
 
 ```ascii
 Thread-Safe Fine-Grained Hash Table Architecture
@@ -53,7 +53,7 @@ Thread-Safe Fine-Grained Hash Table Architecture
           | (bucket_index % 64)
           v
    +--------------------------+
-   | Bucket Mutex (one of 64) |
+   | Bucket Mutex (one of 64)  |
    +--------------------------+
           |
           v
@@ -71,12 +71,7 @@ Resize Process (protected by resize_mutex):
 - Move nodes (no copy) using hash with new size
 - Free old bucket array
 
-## **Build & Run**
-
-bash
 make clean && make
 ./hashtable_test          # Basic test
 ./benchmark               # 1M elements multi-thread
 ./benchmark_extreme       # 100M elements extreme test
-
-

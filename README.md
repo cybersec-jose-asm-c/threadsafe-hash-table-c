@@ -73,8 +73,14 @@ Resize Process (protected by resize_mutex):
 
 ## Build & Run
 
+# Compile the project
 make clean && make
 
-./hashtable_test          # Basic test
-./benchmark               # 1M elements multi-thread
-./benchmark_extreme       # 100M elements extreme test
+# Basic test
+./hashtable_test
+
+# 1M elements multi-thread
+./benchmark
+
+# 100M elements extreme test
+./benchmark_extreme

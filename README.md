@@ -35,7 +35,7 @@
 - Safe handling of negative keys
 - No external dependencies
 
-## ** Architecture Diagram **
+## **Architecture Diagram**
 
 ```ascii
 Thread-Safe Fine-Grained Hash Table Architecture

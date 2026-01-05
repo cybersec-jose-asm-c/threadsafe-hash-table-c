@@ -73,7 +73,7 @@ Resize Process (protected by resize_mutex):
 
 ## Build & Run
 
-```bash
+bash
 make clean && make
 ./hashtable_test          # Basic test
 ./benchmark               # 1M elements multi-thread

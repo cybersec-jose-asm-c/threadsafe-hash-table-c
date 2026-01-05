@@ -32,3 +32,43 @@ make clean && make
 ./hashtable_test          # Basic functionality test
 ./benchmark               # 1M elements multi-thread benchmark
 ./benchmark_extreme       # 10M elements extreme test (the beast mode)
+
+
+Thread-Safe Fine-Grained Hash Table Architecture
+
++---------------------------+
+|       HashTable           |
+| ------------------------- |
+| Node** buckets            |  <-- Array de punteros a listas enlazadas (buckets)
+| size_t size               |  <-- Número actual de buckets (primo)
+| atomic_size_t count       |  <-- Conteo atómico de elementos (O(1) load factor)
+| pthread_mutex_t mutexes[64]  <-- 64 mutexes independientes (fine-grained locking)
+| pthread_mutex_t resize_mutex  <-- Mutex dedicado solo para resize
++---------------------------+
+          |
+          | (bucket_index % 64)
+          v
+   +-------------------+
+   | Bucket Mutex (uno de 64) |
+   +-------------------+
+          |
+          v
+   +-------------------+     +-------------------+     +-------------------+
+   | Bucket 0 (lista)  |<----| Bucket 1 (lista)  |<----| ... Bucket N-1    |
+   +-------------------+     +-------------------+     +-------------------+
+          |                         |                         |
+          v                         v                         v
+   +----------------+        +----------------+        +----------------+
+   | Node (key,value,next) |-->| Node ...       |-->... | Node ...       |
+   +----------------+        +----------------+        +----------------+
+
+Resize Process (protegido por resize_mutex):
+- Crea nuevo array de buckets con tamaño primo mayor
+- Mueve nodos (no copia) usando hash con new_size
+- Libera viejo array
+
+Inserción:
+- Lock bucket mutex específico
+- Inserta/actualiza nodo
+- Incrementa count (atómico)
+- Si load_factor > 0.7 → trylock resize_mutex → resize si necesario

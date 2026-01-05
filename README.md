@@ -43,14 +43,14 @@ make clean && make
 ./benchmark               # 1M elements multi-thread
 ./benchmark_extreme       # 100M elements extreme test
 
-## **Architecture Diagram**
+## ** Architecture Diagram **
 
 ```ascii
 Thread-Safe Fine-Grained Hash Table Architecture
 
 +------------------------------+
-|           HashTable          |
-| ---------------------------- |
+|         HashTable            |
+| -----------------------------|
 | Node** buckets               | <-- Array of pointers to linked lists (buckets)
 | size_t size                  | <-- Current number of buckets (prime number)
 | atomic_size_t count          | <-- Atomic element count (O(1) load factor)
@@ -72,7 +72,7 @@ Thread-Safe Fine-Grained Hash Table Architecture
           v                         v                         v
    +-----------------------+   +----------------+       +----------------+
    | Node (key,value,next) |-->| Node ...       |-->... | Node ...       |
-   +----------------=======+   +----------------+       +----------------+
+   +-----------------------+   +----------------+       +----------------+
 
 Resize Process (protected by resize_mutex):
 - Allocate new bucket array with larger prime size

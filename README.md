@@ -71,7 +71,7 @@ Resize Process (protected by resize_mutex):
 - Move nodes (no copy) using hash with new size
 - Free old bucket array
 
-## Build & Run
+## **Build & Run**
 
 bash
 make clean && make

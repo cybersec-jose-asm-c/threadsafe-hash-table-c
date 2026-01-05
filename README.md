@@ -35,14 +35,6 @@
 - Safe handling of negative keys
 - No external dependencies
 
-## Build & Run
-
-```bash
-make clean && make
-./hashtable_test          # Basic test
-./benchmark               # 1M elements multi-thread
-./benchmark_extreme       # 100M elements extreme test
-
 ## ** Architecture Diagram **
 
 ```ascii
@@ -78,3 +70,13 @@ Resize Process (protected by resize_mutex):
 - Allocate new bucket array with larger prime size
 - Move nodes (no copy) using hash with new size
 - Free old bucket array
+
+## Build & Run
+
+```bash
+make clean && make
+./hashtable_test          # Basic test
+./benchmark               # 1M elements multi-thread
+./benchmark_extreme       # 100M elements extreme test
+
+
